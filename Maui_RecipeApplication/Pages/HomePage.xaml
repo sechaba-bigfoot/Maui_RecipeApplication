@@ -50,7 +50,6 @@
                     Text="Categories" />
                 <StackLayout>
                     <CollectionView
-                        ItemSizingStrategy="MeasureAllItems"
                         ItemsSource="{Binding Categories}"
                         MaximumHeightRequest="80"
                         SelectedItem="{Binding SelectedCategory}"
@@ -63,7 +62,7 @@
                                 <Border
                                     Margin="0,0,5,0"
                                     Padding="10"
-                                    HeightRequest="20"
+                                    BackgroundColor="White"
                                     Stroke="Transparent"
                                     StrokeShape="RoundRectangle 10,10,10,10"
                                     WidthRequest="120">
@@ -91,8 +90,8 @@
                     Text="Recipes" />
                 <!--  List of recipes  -->
                 <CollectionView
-                    ItemsSource="{Binding Recipes}"
                     HeightRequest="300"
+                    ItemsSource="{Binding Recipes}"
                     SelectedItem="{Binding SelectedRecipe}"
                     SelectionMode="Single">
                     <CollectionView.ItemsLayout>
