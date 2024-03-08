@@ -3,14 +3,15 @@
     x:Class="Maui_RecipeApplication.Pages.RecipePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="RecipePage">
+    Title="RecipePage"
+    Shell.NavBarIsVisible="False">
     <ScrollView>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="1.5*" />
             </Grid.RowDefinitions>
-            <Grid>
+            <Grid HeightRequest="400">
                 <Image
                     Aspect="AspectFill"
                     HorizontalOptions="Fill"
@@ -35,10 +36,34 @@
             </Grid>
             <StackLayout Grid.Row="1" Padding="20">
                 <StackLayout Spacing="10">
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="18"
-                        Text="{Binding Recipe.Name}" />
+                    <StackLayout>
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            Text="{Binding Recipe.Name}" />
+                        <HorizontalStackLayout Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                Text="{Binding Recipe.Category}"
+                                TextColor="Purple" />
+                            <Label
+                                FontAttributes="Bold"
+                                Text="|"
+                                TextColor="Purple" />
+                            <Label
+                                FontAttributes="Bold"
+                                Text="{Binding Recipe.StrTags}"
+                                TextColor="Purple" />
+                            <Label
+                                FontAttributes="Bold"
+                                Text="|"
+                                TextColor="Purple" />
+                            <Label
+                                FontAttributes="Bold"
+                                Text="{Binding Recipe.StrArea}"
+                                TextColor="Purple" />
+                        </HorizontalStackLayout>
+                    </StackLayout>
                     <Label FontSize="18" Text="{Binding Recipe.Instructions}" />
                 </StackLayout>
             </StackLayout>

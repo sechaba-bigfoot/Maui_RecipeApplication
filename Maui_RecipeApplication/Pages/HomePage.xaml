@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:Converters="clr-namespace:Converters"
     Title="HomePage"
-    BackgroundColor="#ebf1f5">
+    BackgroundColor="#ebf1f5"
+    Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -49,7 +50,9 @@
                     Text="Categories" />
                 <StackLayout>
                     <CollectionView
+                        ItemSizingStrategy="MeasureAllItems"
                         ItemsSource="{Binding Categories}"
+                        MaximumHeightRequest="80"
                         SelectedItem="{Binding SelectedCategory}"
                         SelectionMode="Single">
                         <CollectionView.ItemsLayout>
@@ -60,7 +63,7 @@
                                 <Border
                                     Margin="0,0,5,0"
                                     Padding="10"
-                                    BackgroundColor="white"
+                                    HeightRequest="20"
                                     Stroke="Transparent"
                                     StrokeShape="RoundRectangle 10,10,10,10"
                                     WidthRequest="120">
@@ -89,6 +92,7 @@
                 <!--  List of recipes  -->
                 <CollectionView
                     ItemsSource="{Binding Recipes}"
+                    HeightRequest="300"
                     SelectedItem="{Binding SelectedRecipe}"
                     SelectionMode="Single">
                     <CollectionView.ItemsLayout>
