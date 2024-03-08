@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Maui_RecipeApplication.Pages.RecipePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="RecipePage">
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="1.5*" />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Image
+                    Aspect="AspectFill"
+                    HorizontalOptions="Fill"
+                    Source="{Binding Recipe.StrMealThumb}"
+                    VerticalOptions="Fill" />
+                <Border
+                    Margin="10"
+                    Padding="8"
+                    BackgroundColor="white"
+                    HorizontalOptions="Start"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 0,10,10,10"
+                    VerticalOptions="Start">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavigateBackCommand}" />
+                    </Border.GestureRecognizers>
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        Text="Back" />
+                </Border>
+            </Grid>
+            <StackLayout Grid.Row="1" Padding="20">
+                <StackLayout Spacing="10">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        Text="{Binding Recipe.Name}" />
+                    <Label FontSize="18" Text="{Binding Recipe.Instructions}" />
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
