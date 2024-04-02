@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:Converters="clr-namespace:Converters"
+    x:Name="Page"
     Title="HomePage"
     BackgroundColor="#ebf1f5"
     Shell.NavBarIsVisible="False">
@@ -53,6 +54,8 @@
                         ItemsSource="{Binding Categories}"
                         MaximumHeightRequest="80"
                         SelectedItem="{Binding SelectedCategory}"
+                        SelectionChangedCommand="{Binding ShowRecipesInCategoryCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedCategory.Name}"
                         SelectionMode="Single">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout Orientation="Horizontal" />
@@ -66,6 +69,12 @@
                                     Stroke="Transparent"
                                     StrokeShape="RoundRectangle 10,10,10,10"
                                     WidthRequest="120">
+                                    <!--<Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={x:Reference Page}, Path=BindingContext.ShowRecipesInCategoryCommand}"
+                                            CommandParameter="{Binding Name}"
+                                            />
+                                    </Border.GestureRecognizers>-->
                                     <StackLayout Spacing="5">
                                         <Image
                                             HorizontalOptions="Center"
@@ -93,6 +102,8 @@
                     HeightRequest="300"
                     ItemsSource="{Binding Recipes}"
                     SelectedItem="{Binding SelectedRecipe}"
+                    SelectionChangedCommand="{Binding OpenRecipeCommand}"
+                    SelectionChangedCommandParameter="{Binding SelectedRecipe.Id}"
                     SelectionMode="Single">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Horizontal" />
@@ -103,6 +114,9 @@
                                 Margin="0,0,5,0"
                                 Padding="0"
                                 WidthRequest="220">
+                                <!--<Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenRecipeCommand}" CommandParameter="{Binding Id}" />
+                                </Grid.GestureRecognizers>-->
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="Auto" />

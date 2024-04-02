@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Helpers;
 using Maui_RecipeApplication.Models;
+using Maui_RecipeApplication.Services.Interfaces;
 
 namespace Maui_RecipeApplication.Objects
 {
@@ -11,20 +14,23 @@ namespace Maui_RecipeApplication.Objects
         [ObservableProperty] private UriImageSource _Image;
         //[ObservableProperty] private string _Image;
         
+       
+
+
         private RecipeObject()
         {
             
         }
 
-        public static async Task<RecipeObject> NewRecipe(Recipe recipe)
+        public static RecipeObject NewRecipe(Recipe recipe)
         {
             RecipeObject obj = new RecipeObject
             {
-                Id = recipe.Id,
-                Name = recipe.Name,
+                Id = recipe.Id ?? "",
+                Name = recipe.Name ?? "Error",
                 Image = new UriImageSource 
                 { 
-                    Uri = new Uri(recipe.Image),
+                    Uri = new Uri(recipe.Image ?? "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="),
                     CachingEnabled = true,
                     CacheValidity = TimeSpan.FromDays(7),
                 }

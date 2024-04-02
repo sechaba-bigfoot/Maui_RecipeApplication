@@ -8,6 +8,7 @@ namespace Maui_RecipeApplication
 {
     public interface IInitialise
     {
+        public bool IsInitialized { get; }
         public Task Initialise();
     }
 }

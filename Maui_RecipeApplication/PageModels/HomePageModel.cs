@@ -1,15 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Maui_RecipeApplication.Models;
 using Maui_RecipeApplication.Objects;
 using Maui_RecipeApplication.PageModels.Shared;
 using Maui_RecipeApplication.Pages;
 using Maui_RecipeApplication.Services.Interfaces;
+using System.Reflection.Metadata;
 
 namespace Maui_RecipeApplication.PageModels
 {
     public partial class HomePageModel : BasePageModel, IInitialise
     {
         private readonly IRecipeService _recipeService;
+        private readonly INavigationService _navigationService;
 
         [ObservableProperty] List<RecipeObject> _Recipes = new List<RecipeObject>();
         [ObservableProperty] List<CategoryObject> _Categories = new List<CategoryObject>();
@@ -17,35 +20,42 @@ namespace Maui_RecipeApplication.PageModels
         [ObservableProperty] CategoryObject _SelectedCategory;
         partial void OnSelectedCategoryChanged(CategoryObject value)
         {
-            UpdateRecipes();
+            //UpdateRecipes();
         }
 
         [ObservableProperty] RecipeObject _SelectedRecipe;
+        
+        public bool IsInitialized { get; private set; }
+
         partial void OnSelectedRecipeChanged(RecipeObject value)
         {
-            OpenRecipe();
+            //OpenRecipe();
         }
 
-        
-        public HomePageModel(IRecipeService recipeService)
+        public HomePageModel(IRecipeService recipeService, INavigationService navigationService)
         {
             _recipeService = recipeService;
+            _navigationService = navigationService;
         }
 
-        private async void OpenRecipe()
+        [RelayCommand]
+        public async Task OpenRecipe(object parameter)
         {
             try
             {
-                RecipeDetailList recipeDetails = await _recipeService.GetRecipeDetailsAsync(SelectedRecipe.Id);
-                if (recipeDetails.Recipes.Any())
+                if (parameter != null && parameter is string recipeId)
                 {
-                    RecipeDetail recipeDetail = recipeDetails.Recipes.First();
-                    IDictionary<string, object> query = new Dictionary<string, object>()
+                    RecipeDetailList recipeDetails = await _recipeService.GetRecipeDetailsAsync(recipeId);
+                    if (recipeDetails.Recipes.Any())
                     {
-                        { nameof(RecipeDetail), recipeDetail}
-                    };
+                        RecipeDetail recipeDetail = recipeDetails.Recipes.First();
+                        IDictionary<string, object> paramaters = new Dictionary<string, object>()
+                        {
+                            { nameof(RecipeDetail), recipeDetail}
+                        };
 
-                    await AppShell.Current.GoToAsync(nameof(RecipePage), query);
+                       await _navigationService.NavigateToAsync(nameof(RecipePage), paramaters);
+                    }
                 }
             }
             catch (Exception exception)
@@ -54,26 +64,28 @@ namespace Maui_RecipeApplication.PageModels
             }
         }
 
-        public async void UpdateRecipes()
+        [RelayCommand]
+        public async void ShowRecipesInCategory(object parameter)
         {
-            RecipeList recipeList = new RecipeList();
-
             try
             {
-                string category = SelectedCategory.Name;
-                recipeList = await _recipeService.GetRecipesAsync(category);
-
-                if (recipeList.Recipes.Any())
+                if(parameter != null && parameter is string category)
                 {
-                    List<RecipeObject> recipes = new List<RecipeObject>();
+                    RecipeList recipeList = new RecipeList();
+                    recipeList = await _recipeService.GetRecipesAsync(category);
 
-                    foreach (Recipe item in recipeList.Recipes)
+                    if (recipeList.Recipes.Any())
                     {
-                        RecipeObject obj = await RecipeObject.NewRecipe(item);
-                        recipes.Add(obj);
-                    }
+                        List<RecipeObject> recipes = new List<RecipeObject>();
 
-                    Recipes = recipes;
+                        foreach (Recipe item in recipeList.Recipes)
+                        {
+                            RecipeObject obj = RecipeObject.NewRecipe(item);
+                            recipes.Add(obj);
+                        }
+
+                        Recipes = recipes;
+                    }
                 }
 
             }
@@ -85,28 +97,34 @@ namespace Maui_RecipeApplication.PageModels
 
         public async Task Initialise()
         {
-            CategoryList list = new CategoryList();
-
             try
             {
-                list = await _recipeService.GetRecipeCategoriesAsync();
+
+                if (IsInitialized) return;
+
+                CategoryList list = await _recipeService.GetRecipeCategoriesAsync();
+
+                if (list?.Categories != null && list.Categories.Any())
+                {
+                    List<CategoryObject> categories = new List<CategoryObject>();
+
+                    foreach (Category item in list.Categories)
+                    {
+                        categories.Add(CategoryObject.NewCategory(item));
+                    }
+
+                    Categories = categories;
+                    SelectedCategory = categories.FirstOrDefault();
+                }
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
+                // Handle exception
             }
-
-            if(list.Categories.Any()) 
+            finally
             {
-                List<CategoryObject> categories = new List<CategoryObject>();
-                
-                foreach (Category item in list.Categories) 
-                {
-                    categories.Add(CategoryObject.NewCategory(item));
-                }
-
-                Categories = categories;
-                SelectedCategory = categories[0];
+                IsInitialized = true;
             }
 
         }

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using Maui_RecipeApplication.PageModels;
 using Maui_RecipeApplication.Services;
 using Maui_RecipeApplication.Services.Interfaces;
@@ -21,6 +22,7 @@ namespace Maui_RecipeApplication
                 });
 
             builder.Services.AddSingleton<IRecipeService, RecipeService>();
+            builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddTransient<HomePageModel>();
             builder.Services.AddTransient<RecipePageModel>();
 

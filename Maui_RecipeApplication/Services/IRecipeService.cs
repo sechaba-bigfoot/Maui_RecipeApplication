@@ -20,5 +20,7 @@ namespace Maui_RecipeApplication.Services
         {
             return await SharedClient.GetAsync<RecipeList>($"filter.php?c={category}");
         }
+
+
     }
 }
