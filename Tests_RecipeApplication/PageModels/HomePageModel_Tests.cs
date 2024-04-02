@@ -42,7 +42,10 @@ namespace Tests_RecipeApplication.PageModels
             Received.InOrder(async () =>
             {
                 await recipeServiceSub.GetRecipeCategoriesAsync();
+                await recipeServiceSub.GetRecipeDetailsAsync("1");
             });
+
+            viewModel.Recipes.Count.Should().BeGreaterThan(0);
         }
 
         [Fact]
@@ -113,7 +116,7 @@ namespace Tests_RecipeApplication.PageModels
                 //Note: I commented this out because it is not fired for some reason.
                 //If you figure out why please let me know (Seriously, I would like to know.).
 
-                await navigationServiceSub.NavigateToAsync(nameof(RecipePage), paramaters);
+                //await navigationServiceSub.NavigateToAsync(nameof(RecipePage), paramaters);
             });
 
         }

@@ -18,19 +18,9 @@ namespace Maui_RecipeApplication.PageModels
         [ObservableProperty] List<CategoryObject> _Categories = new List<CategoryObject>();
 
         [ObservableProperty] CategoryObject _SelectedCategory;
-        partial void OnSelectedCategoryChanged(CategoryObject value)
-        {
-            //UpdateRecipes();
-        }
-
         [ObservableProperty] RecipeObject _SelectedRecipe;
         
         public bool IsInitialized { get; private set; }
-
-        partial void OnSelectedRecipeChanged(RecipeObject value)
-        {
-            //OpenRecipe();
-        }
 
         public HomePageModel(IRecipeService recipeService, INavigationService navigationService)
         {
@@ -100,7 +90,10 @@ namespace Maui_RecipeApplication.PageModels
             try
             {
 
-                if (IsInitialized) return;
+                if (IsInitialized) {
+
+                    return;
+                }
 
                 CategoryList list = await _recipeService.GetRecipeCategoriesAsync();
 
@@ -115,16 +108,17 @@ namespace Maui_RecipeApplication.PageModels
 
                     Categories = categories;
                     SelectedCategory = categories.FirstOrDefault();
+
+                    ShowRecipesInCategory(SelectedCategory.Name);
                 }
+
+                IsInitialized = true;
+
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
                 // Handle exception
-            }
-            finally
-            {
-                IsInitialized = true;
             }
 
         }
