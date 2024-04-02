@@ -4,7 +4,7 @@ namespace Maui_RecipeApplication.Services
 {
     public class NavigationService : INavigationService
     {
-        public async Task NavigateToAsync(string route, IDictionary<string, object> routeParameters = null)
+        public async Task NavigateToAsync(string route, IDictionary<string, object> routeParameters)
         {
             ShellNavigationState shellNavigation = new ShellNavigationState(route);
             if (routeParameters != null)

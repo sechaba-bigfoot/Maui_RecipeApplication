@@ -11,7 +11,6 @@ namespace Tests_RecipeApplication.PageModels
         //I am aware there are other tests neeeded but considering time and
         //seeing that I am not actuaally handling some of those scenarios in the actual code I decided not write them.
 
-
         [Fact]
         public async Task Initialise()
         {
@@ -44,6 +43,38 @@ namespace Tests_RecipeApplication.PageModels
             {
                 await recipeServiceSub.GetRecipeCategoriesAsync();
             });
+        }
+
+        [Fact]
+        public async Task Initialise_AlreadyInitialised_ShouldReturn()
+        {
+            //Arrange
+            IRecipeService recipeServiceSub = Substitute.For<IRecipeService>();
+            INavigationService navigationServiceSub = Substitute.For<INavigationService>();
+
+            recipeServiceSub.GetRecipeCategoriesAsync().Returns(Task.FromResult(
+                new CategoryList()
+                {
+                    Categories = new List<Category>()
+                    {
+                        new Category() {},
+                        new Category() {}
+                    }
+                }
+            ));
+
+            HomePageModel viewModel = new HomePageModel(recipeServiceSub, navigationServiceSub);
+
+            //Act
+            await viewModel.Initialise();
+            await viewModel.Initialise();
+
+            // Assert
+            viewModel.Categories.Count.Should().BeGreaterThan(0);
+            viewModel.SelectedCategory.Should().NotBe(null);
+            viewModel.IsInitialized.Should().BeTrue();
+
+            await recipeServiceSub.Received(1).GetRecipeCategoriesAsync();
         }
 
         [Fact]
@@ -82,7 +113,7 @@ namespace Tests_RecipeApplication.PageModels
                 //Note: I commented this out because it is not fired for some reason.
                 //If you figure out why please let me know (Seriously, I would like to know.).
 
-                //await navigationServiceSub.NavigateToAsync(nameof(RecipePage), paramaters); 
+                await navigationServiceSub.NavigateToAsync(nameof(RecipePage), paramaters);
             });
 
         }
